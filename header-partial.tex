@@ -1,0 +1,114 @@
+% Formatting of tables & knitr::kable and kableExtra functionality
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+
+% Line numbering
+$if(numberlines)$
+\usepackage$if(numberlines-options)$[$numberlines-options[,]$]$endif${lineno}
+\linenumbers
+$endif$
+
+% endfloat stuff
+$if(endfloat)$
+\usepackage[$if(endfloatoption)$$for(endfloatoption)$$endfloatoption$$sep$,$endfor$$else$tablesfirst,nomarkers$endif$]{endfloat}
+$endif$
+
+% fancyhdr pagestyle
+$if(fancyhdr)$
+\usepackage{fancyhdr}
+
+$if(fancyhdr.first)$
+\fancypagestyle{myfirst}{%
+\fancyfoot[C]{\thepage}% Default to just page number
+%
+$if(fancyhdr.first.headleft)$
+\fancyhead[L]{$fancyhdr.first.headleft$}%
+$endif$
+$if(fancyhdr.first.headcenter)$
+\fancyhead[C]{$fancyhdr.first.headcenter$}%
+$endif$
+$if(fancyhdr.first.headright)$
+\fancyhead[R]{$fancyhdr.first.headright$}%
+$endif$
+$if(fancyhdr.first.headrulewidth)$
+\renewcommand{\headrulewidth}{$fancyhdr.first.headrulewidth$}
+$endif$
+%
+$if(fancyhdr.first.footleft)$
+\fancyfoot[L]{$fancyhdr.first.footleft$}%
+$endif$
+$if(fancyhdr.first.footcenter)$
+\fancyfoot[C]{$fancyhdr.first.footcenter$}%
+$endif$
+$if(fancyhdr.first.footright)$
+\fancyfoot[R]{$fancyhdr.first.footright$}%
+$endif$
+$if(fancyhdr.first.footrulewidth)$
+\renewcommand{\footrulewidth}{$fancyhdr.first.footrulewidth$}
+$endif$
+}
+$endif$
+
+$if(fancyhdr.subsequent)$
+\fancypagestyle{mysubsequent}{%
+\fancyfoot[C]{\thepage}% Default to just page number
+%
+$if(fancyhdr.subsequent.headleft)$
+\fancyhead[L]{$fancyhdr.subsequent.headleft$}%
+$endif$
+$if(fancyhdr.subsequent.headcenter)$
+\fancyhead[C]{$fancyhdr.subsequent.headcenter$}%
+$endif$
+$if(fancyhdr.subsequent.headright)$
+\fancyhead[R]{$fancyhdr.subsequent.headright$}%
+$endif$
+$if(fancyhdr.subsequent.headrulewidth)$
+\renewcommand{\headrulewidth}{$fancyhdr.subsequent.headrulewidth$}
+$endif$
+%
+$if(fancyhdr.subsequent.footleft)$
+\fancyfoot[L]{$fancyhdr.subsequent.footleft$}%
+$endif$
+$if(fancyhdr.subsequent.footcenter)$
+\fancyfoot[C]{$fancyhdr.subsequent.footcenter$}%
+$endif$
+$if(fancyhdr.subsequent.footright)$
+\fancyfoot[R]{$fancyhdr.subsequent.footright$}%
+$endif$
+$if(fancyhdr.subsequent.footrulewidth)$
+\renewcommand{\footrulewidth}{$fancyhdr.subsequent.footrulewidth$}
+$endif$
+}
+$endif$
+
+$endif$
+
+%%%%% Author and title stuff to be updated %%%%%
+
+% Macros for creating and referencing stored reference
+\makeatletter
+\def\MyNewLabel#1#2#3{\expandafter\gdef\csname #1@#2\endcsname{#3}}
+
+\def\MyRef#1#2{\@ifundefined{#1@#2}{???}{\csname #1@#2\endcsname}}
+
+\newcommand*\ifcounter[1]{%
+  \ifcsname c@#1\endcsname
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+}
+\makeatother
+
+% Create labels for Addresses if the are given by code
+$for(address)$
+\MyNewLabel{ADDRTXT}{$address.code$}{$address.address$}
+$endfor$
+
+% Create labels for Footnotes if they are given by code
+$for(footnote)$
+\MyNewLabel{ANOTETXT}{$footnote.code$}{$footnote.text$}
+$endfor$

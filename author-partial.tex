@@ -1,0 +1,153 @@
+
+%%% Special footnotes for addresses and author footnotes
+\usepackage{bigfoot}
+\DeclareNewFootnote{Addr}[arabic] % Only used for NOT authblk
+\DeclareNewFootnote{ANote}[fnsymbol]
+
+%%% Address and author notes as a function of format %%%
+$if(authblk)$ % Use authblk for affiliations %%%%%%%%%%%
+\usepackage{authblk}
+
+% Always separate by commas
+\renewcommand\Authsep{, }
+\renewcommand\Authand{, }
+\renewcommand\Authands{, }
+
+% Counter for addresses and footnotes
+\newcounter{addrcnt}
+
+% thanks definition that doesn't produce superscript marks
+\makeatletter
+\newcommand*\createaddrlblbycode[1]{%
+  \ifcounter{ADDRLBL@#1}
+    {}
+    {\refstepcounter{addrcnt}\newcounter{ADDRLBL@#1}\setcounter{ADDRLBL@#1}{\value{addrcnt}}}%
+}
+
+\newcommand*\addrlblbycode[1]{\arabic{ADDRLBL@#1}}
+
+\newcommand*\addrbycode[1]{%
+  \ifcounter{ADDR@#1}
+    {}
+    {\newcounter{ADDR@#1}%
+     \affil[\addrlblbycode{#1}]{\MyRef{ADDRTXT}{#1}}}%
+}
+
+\newcommand*\createanotelblbycode[1]{%
+  \ifcounter{ANOTELBL@#1}
+    {}
+    {\refstepcounter{footnoteANote}\newcounter{ANOTELBL@#1}\setcounter{ANOTELBL@#1}{\value{footnoteANote}}}%
+}
+
+\newcommand*\anotelblbycode[1]{\fnsymbol{ANOTELBL@#1}}
+
+\newcommand*\anotebycode[1]{%
+  \ifcounter{ANOTE@#1}
+    {}
+    {\newcounter{ANOTE@#1}%
+     \footnotetextANote[\value{ANOTELBL@#1}]{\MyRef{ANOTETXT}{#1}}}%
+}
+\makeatother
+
+$for(author)$
+
+$for(author.affiliation)$
+\createaddrlblbycode{$author.affiliation$}
+$endfor$
+
+$if(author.corresponding_author)$
+\MyNewLabel{ANOTETXT}{$author.name$@CORRESP}{Corresponding author. \href{mailto:$author.email$}{\nolinkurl{$author.email$}}}
+\makeatletter\createanotelblbycode{$author.name$@CORRESP}\makeatother
+$endif$
+
+$for(author.footnote)$
+\createanotelblbycode{$author.footnote$}
+$endfor$
+
+\author[%
+$for(author.affiliation)$
+\addrlblbycode{$author.affiliation$}%
+$sep$,%
+$endfor$
+$if(author.corresponding_author)$
+$if(author.affiliation)$,$endif$%
+\makeatletter\anotelblbycode{$author.name$@CORRESP}\makeatother
+$endif$
+$if(author.footnote)$
+$if(author.corresponding_author)$,$elseif(author.affiliation)$,$endif$%
+$for(author.footnote)$
+$$\anotelblbycode{$author.footnote$}$$%
+$sep$,%
+$endfor$
+$endif$
+]{$author.name$}
+
+$for(author.affiliation)$
+\addrbycode{$author.affiliation$}
+$endfor$
+
+$endfor$
+
+$else$ % Use footnotes for affiliations %%%%%%%%%%%%%
+
+% Get rid of redefinition of \@makefnmark in \maketitle
+% Gets rid of spacing issues
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\maketitle{\def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}}{}{}{}
+\makeatother
+
+% Hook into the \@thanks command
+\makeatletter
+\def\thanksAddr#1{% <--- These %'s are necessary for spacing
+  \footnotemarkAddr\protected@xdef\@thanks{\@thanks%
+        \protect\footnotetextAddr[\the \c@footnoteAddr]{#1}}%
+}
+\def\thanksANote#1{%
+  \footnotemarkANote%
+  \protected@xdef\@thanks{\@thanks%
+        \protect\footnotetextANote[\the \c@footnoteANote]{#1}}%
+}
+
+\newcommand*\thanksAddrbycode[1]{%
+  \ifcounter{ADDR@#1}
+    {\footnotemarkAddr[\value{ADDR@#1}]}
+    {\newcounter{ADDR@#1}%
+     \thanksAddr{\MyRef{ADDRTXT}{#1}}%
+     \setcounter{ADDR@#1}{\value{footnoteAddr}}} % Note sure this will work
+}
+
+\newcommand*\thanksANotebycode[1]{%
+  \ifcounter{ANOTE@#1}
+    {\footnotemarkANote[\value{ANOTE@#1}]}
+    {\newcounter{ANOTE@#1}%
+     \thanksANote{\MyRef{ANOTETXT}{#1}}%
+     \setcounter{ANOTE@#1}{\value{footnoteANote}}} % Note sure this will work
+}
+\makeatother
+
+\newcommand*\authsep{, }
+\newcommand*\thankssep{$$^{,}$$}
+
+$if(author)$
+\author{%
+$for(author)$
+$author.name$%
+$for(author.affiliation)$
+\thanksAddrbycode{$author.affiliation$}%
+$sep$\thankssep%
+$endfor$
+$if(author.corresponding_author)$
+$if(author.affiliation)$\thankssep$endif$% extra comma
+\thanksANote{Corresponding author. \href{mailto:$author.email$}{\nolinkurl{$author.email$}}} % space here seems necessary to get spacing right
+$endif$
+$if(author.footnote)$$if(author.affiliation)$\thankssep$elseif(author.corresponding_author)$\thankssep$endif$$endif$% extra comma
+$for(author.footnote)$
+\thanksANotebycode{$author.footnote$}%
+$sep$\thankssep%
+$endfor$
+$sep$\authsep%
+$endfor$
+}
+$endif$%endif(author)
+$endif$%endif(authblk)
