@@ -34,12 +34,12 @@ abstract:
       This is the first paragraph of the abstract. It has several sentences making it go over several lines. For this it needs to have a lot of text.
   
       This is the second paragraph.
+  # - text: |
+  #     Un resumen en español.
+  #   babel-lang: spanish
+  #   name: Resumen
   - text: |
-      Un resumen en español.
-    babel-lang: spanish
-    name: Resumen
-  - text: |
-      ::: {lang=pt}
+      ::: {lang=fr}
       Voici un abstract en francais.
       :::
     name: Résumé
@@ -102,13 +102,15 @@ options(knitr.table.format="latex") # For kable tables to work without setting f
 <!--
 ::: {lang=es}
 :::
+-->
 
 ::: {lang=fr}
 :::
--->
 
+<!--
 ::: {lang=pt}
 :::
+-->
 
 # Introduction
 

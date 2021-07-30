@@ -290,8 +290,9 @@ $else$
 \makeatletter
 \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
 \makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+% % Allow footnotes in longtable head/foot
+% \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\usepackage{footnote} % For some unknown reason, footnotehyper clashes with French
 \makesavenoteenv{longtable}
 $endif$
 $endif$
