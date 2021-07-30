@@ -29,27 +29,6 @@ footnote:
     text: "Equal contribution"
   - code: 2
     text: "Current email address: [cat@example.com](mailto:cat@example.com)"
-abstract:
-  - text: |
-      This is the first paragraph of the abstract. It has several sentences making it go over several lines. For this it needs to have a lot of text.
-  
-      This is the second paragraph.
-  # - text: |
-  #     Un resumen en español.
-  #   babel-lang: spanish
-  #   name: Resumen
-  - text: |
-      ::: {lang=fr}
-      Voici un abstract en francais.
-      :::
-    name: Résumé
-# Specifying lang=fr doesn't work for some reason, probably a bug in the texlive-lang-french package. 
-# Using a span to specify abstract language generally works, but language doesn't get language into `otherlangs` variable. Need a span in the actual document text for this. Using an empty span at beginning of document for this purpose.
-# Span with spanish doesn't seem to create spanish environment for some reason.
-keywords:
-  - keyword1
-  - keyword2
-  - keyword3
 #classoptions:
 #  - a4paper # Can also be here
 bibliography: mybibfile.bib
@@ -99,18 +78,33 @@ knitr::opts_chunk$set(fig.env="figure") # Latex figure environment
 options(knitr.table.format="latex") # For kable tables to work without setting format option
 ```
 
-<!--
-::: {lang=es}
-:::
--->
+::: {.abstract data-latex="" lang=en}
+An abstract text.
 
-::: {lang=fr}
+Second paragraph.
 :::
 
-<!--
-::: {lang=pt}
+::: {.keywords data-latex="" lang=en}
+Keyword1; Keyword2
 :::
--->
+
+<!-- Define as portuguese as spanish causes weird failure -->
+<!-- Use class renameableabstract to give abstract a different title -->
+::: {.renameableabstract data-latex="[Resumen]" lang=pt}
+Un poco de texto.
+:::
+
+::: {.keywords data-latex="[Palabras Claves]" lang=pt}
+Palabra1; Palabra2
+:::
+
+::: {.abstract data-latex="" lang=fr}
+Un peu de texte.
+:::
+
+::: {.keywords data-latex="[Mots clés]" lang=fr}
+Mot1; Mot2
+:::
 
 # Introduction
 

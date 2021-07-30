@@ -1,4 +1,31 @@
 
+%%%%% Authors, affiliations and author notes stuff %%%%%
+
+% Macros for creating and referencing stored reference
+\makeatletter
+\def\MyNewLabel#1#2#3{\expandafter\gdef\csname #1@#2\endcsname{#3}}
+
+\def\MyRef#1#2{\@ifundefined{#1@#2}{???}{\csname #1@#2\endcsname}}
+
+\newcommand*\ifcounter[1]{%
+  \ifcsname c@#1\endcsname
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+}
+\makeatother
+
+% Create labels for Addresses if the are given by code
+$for(address)$
+\MyNewLabel{ADDRTXT}{$address.code$}{$address.address$}
+$endfor$
+
+% Create labels for Footnotes if they are given by code
+$for(footnote)$
+\MyNewLabel{ANOTETXT}{$footnote.code$}{$footnote.text$}
+$endfor$
+
 %%% Special footnotes for addresses and author footnotes
 \usepackage{bigfoot}
 \DeclareNewFootnote{Addr}[arabic] % Only used for NOT authblk

@@ -86,29 +86,11 @@ $endif$
 
 $endif$
 
-%%%%% Author and title stuff to be updated %%%%%
-
-% Macros for creating and referencing stored reference
+% Environment for keywords
 \makeatletter
-\def\MyNewLabel#1#2#3{\expandafter\gdef\csname #1@#2\endcsname{#3}}
-
-\def\MyRef#1#2{\@ifundefined{#1@#2}{???}{\csname #1@#2\endcsname}}
-
-\newcommand*\ifcounter[1]{%
-  \ifcsname c@#1\endcsname
-    \expandafter\@firstoftwo
-  \else
-    \expandafter\@secondoftwo
-  \fi
-}
+\newcommand\keywordsname{Keywords}
+\newenvironment*{keywords}[1][\keywordsname]{\if@twocolumn \else \small \quotation \fi \textbf{\textit{#1 ---}}}{\if@twocolumn \else \small \endquotation \fi}
 \makeatother
 
-% Create labels for Addresses if the are given by code
-$for(address)$
-\MyNewLabel{ADDRTXT}{$address.code$}{$address.address$}
-$endfor$
-
-% Create labels for Footnotes if they are given by code
-$for(footnote)$
-\MyNewLabel{ANOTETXT}{$footnote.code$}{$footnote.text$}
-$endfor$
+% Environment for abstract that takes new abstract name
+\newenvironment{renameableabstract}[1][\abstractname]{\let\oldabstractname\abstractname \renewcommand{\abstractname}{#1} \begin{abstract}}{\end{abstract} \renewcommand{\abstractname}{\oldabstractname}}
