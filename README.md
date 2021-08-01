@@ -12,3 +12,8 @@ articles.
 Multi-lingual abstracts are working very poorly currently due to a
 number of different and separate issues. This needs to be fixed, but
 there is currently no simple solution.
+
+For convenience, I am also including a single file
+`skeleton_standalone.Rmd` that includes the `template.tex` with the
+partials incorporated in the skeleton so you can use it as a
+standalone document (but it doesn't include the `.csl` and the `.bib` files). 
