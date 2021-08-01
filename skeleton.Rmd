@@ -129,7 +129,7 @@ By default, citations are handled using CSQL style files, but `natbib` citations
 
 Here are two sample references: 
 
-* **author (year) example:** @horvath2018dna showed some really cool things. Only seems to work properly if `namedate: TRUE`. 
+* **author (year) example:** @horvath2018dna showed some really cool things.
 * **(author year) example:** This is a well known result [@ji20123d]. 
 
 The bibliography will appear at the end of the document.
